@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
+from geopy.geocoders import Nominatim
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from firebase_config import auth
@@ -100,7 +101,9 @@ def post_list(request):
         'page_obj': page_obj,
         'categories': categories,
         'latest_posts': latest_posts,
-        'popular_posts': popular_posts
+        'popular_posts': popular_posts,
+        'latitude': 34.0522,
+        'longitude': -118.2437,
     }
 
     # Render the template with the context data
@@ -258,6 +261,7 @@ def logout(request):
 
 @login_required
 def profile(request):
+    profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -268,10 +272,36 @@ def profile(request):
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
-
+    latitude = profile.latitude if profile.latitude else 0  # Default to 0 or some other value
+    longitude = profile.longitude if profile.longitude else 0
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'latitude': profile.latitude,  # Make sure these fields exist in your model
+        'longitude': profile.longitude,
     }
 
     return render(request, 'registration/profile.html', context)
+
+def get_coordinates(address):
+    geolocator = Nominatim(user_agent="blog")
+    location = geolocator.geocode(address)
+    if location:
+        return (location.latitude, location.longitude)
+    return None
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            # Optionally, geocode the city and state to get coordinates
+            coordinates = get_coordinates(f"{profile.city}, {profile.state}, {profile.country.name}")
+            if coordinates:
+                profile.latitude, profile.longitude = coordinates
+            profile.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=request.user.userprofile)
+    return render(request, 'registration/profile.html', {'form': form})

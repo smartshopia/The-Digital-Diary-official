@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./The_Digital_Diary",
+        "./The_Digital_Diary"
+    ]
+}

@@ -87,124 +87,22 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ u_form|crispy }} <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
-        {{ p_form|crispy }}<form method="post" action="{% url 'save_location' %}">
-          {% csrf_token %}
-          <input type="hidden" id="latitude" name="latitude" />
-          <input type="hidden" id="longitude" name="longitude" />
-          <button type="submit">Save Location</button>
-      </form>
-      
-      <script>
-          function saveLocation(lat, lon) {
-              document.getElementById('latitude').value = lat;
-              document.getElementById('longitude').value = lon;
-          }
-      
-          map.on('click', function(e) {
-              var lat = e.latlng.lat;
-              var lon = e.latlng.lng;
-              saveLocation(lat, lon);
-          });
-      </script>
+        {{ p_form|crispy }}<div id="map" style="height: 400px;"></div>
         <div id="map" style="height: 400px;"></div>
-        <input type="text" id="address" placeholder="Enter an address" />
-        <button onclick="geocode()">Find Location</button><div id="map" style="height: 400px;"></div>
+
         <script>
-          // Initialize the map
-          var map = L.map('map').setView([51.505, -0.09], 13);
-      
-          // Add OSM layer to the map
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              maxZoom: 19,
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(map);
-      
-          // Function to geocode an address
-          function geocode() {
-              var address = document.getElementById('address').value;
-              var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
-      
-              fetch(url)
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data.length > 0) {
-                          var lat = data[0].lat;
-                          var lon = data[0].lon;
-      
-                          // Set map view to the location
-                          map.setView([lat, lon], 13);
-      
-                          // Add a marker to the location
-                          L.marker([lat, lon]).addTo(map)
-                              .bindPopup(`<b>${data[0].display_name}</b>`)
-                              .openPopup();
-                      } else {
-                          alert('Location not found');
-                      }
-                  })
-                  .catch(error => console.log('Geocoding error:', error));
-          }
-      </script>
-      <script>
-        // Function to reverse geocode coordinates
-        function reverseGeocode(lat, lon) {
-            var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-    
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.address) {
-                        var address = data.display_name;
-                        alert(`Address: ${address}`);
-                    } else {
-                        alert('No address found');
-                    }
-                })
-                .catch(error => console.log('Reverse geocoding error:', error));
-        }
-    
-        // Example usage: reverse geocoding on map click
-        map.on('click', function(e) {
-            var lat = e.latlng.lat;
-            var lon = e.latlng.lng;
-            reverseGeocode(lat, lon);
-        });
-    </script>
-<script>
-  // Example custom icon
-  var customIcon = L.icon({
-      iconUrl: 'path_to_custom_icon.png', // Replace with your icon path
-      iconSize: [38, 38], // Size of the icon
-      iconAnchor: [22, 38], // Point where the icon is anchored to the map
-      popupAnchor: [-3, -38] // Point where the popup should open relative to the iconAnchor
-  });
-
-  // Add custom marker to the map
-  L.marker([51.5, -0.09], {icon: customIcon}).addTo(map)
-      .bindPopup('This is a custom marker!')
-      .openPopup();
-</script>
-<script>
-  function locateUser() {
-      map.locate({setView: true, maxZoom: 16});
-
-      map.on('locationfound', function(e) {
-          L.marker(e.latlng).addTo(map)
-              .bindPopup('You are here!')
+           
+            var map = L.map('map').setView([], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 199,
+                attribution: 'hy'
+            }).addTo(map);
+        
+            var marker = L.marker([{ latitude }, { longitude }]).addTo(map)
+              .bindPopup('You are here.')
               .openPopup();
-      });
-
-      map.on('locationerror', function() {
-          alert('Location access denied.');
-      });
-  }
-
-  // Call this function to center on user location
-  locateUser();
-</script>
-
-          // The marker, positioned at the location
-          var marker = new google.maps.Marker({position: location, map: map});
+        </script>
+        
               
         <button type="submit" class="btn btn-primary">Update</button> </br>
         <p><a href="{% url 'password_change' %}" class="btn btn-primary" style="justify-content: center;">Password Change</a></p>

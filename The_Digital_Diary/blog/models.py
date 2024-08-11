@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.html import strip_tags
 import pycountry
 from django import forms
+from django_countries.fields import CountryField
 #from .signals import *
 #from tinymce.models import HTMLField
 from django_ckeditor_5.fields import CKEditor5Field
@@ -14,8 +15,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-    location = models.CharField(max_length=30, blank=True)
+    #location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    country = CountryField(blank_label='(select country)')
+    state = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6),
+    longitude = models.DecimalField(max_digits=9, decimal_places=6),
     # Add any other fields you want
 
     @property
@@ -23,10 +29,12 @@ class Profile(models.Model):
         if self.profile_picture:
             return self.profile_picture.url
         else:
-            return '/media/profile_pictures/image.jpg'
+            return '/media/profile_pictures/tdd.jpg'
 
     def __str__(self):
         return f'{self.user.username} Profile'
+    def __str__(self):
+        return self.user.username
 
 class LocationForm(forms.Form):
     country = forms.ChoiceField(
