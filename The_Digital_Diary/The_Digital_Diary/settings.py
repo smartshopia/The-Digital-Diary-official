@@ -170,9 +170,18 @@ BASE_DIR1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Define STATIC_URL for serving static files during development
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+STATICFILES_DIRS2 = [
+    BASE_DIR / "static",  # Default directory for static files
+]
 
 # Define STATIC_ROOT for collecting static files during deployment
-STATIC_ROOT = os.path.join(BASE_DIR1, 'staticfiles')
+STATIC_ROOT1 = os.path.join(BASE_DIR1, 'staticfiles')
+STATIC_ROOT2 = BASE_DIR / "staticfiles"
 
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

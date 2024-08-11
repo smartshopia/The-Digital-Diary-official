@@ -34,12 +34,20 @@ class LocationForm(forms.Form):
         required=True,
         label="Select Country"
     )
+class Country(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=3)
 
-class Location(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    def __str__(self):
+        return self.name
+
+class State(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=3)
+
+    def __str__(self):
+        return f"{self.name}, {self.country.name}"  
 
 class Post1(models.Model):
     title = models.CharField(max_length=200)
