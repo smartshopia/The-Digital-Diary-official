@@ -77,11 +77,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog",
     "accounts",
-    #'ckeditor',
+    "crispy_forms",
+    'crispy_bootstrap4',
     'django_ckeditor_5',
     #'ckeditor_uploader',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 MIDDLEWARE = [

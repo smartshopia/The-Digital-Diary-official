@@ -25,11 +25,12 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('blog.urls')),
+    path('profile/', blog_views.profile, name='profile'),
     path("accounts/", include("django.contrib.auth.urls")),
     path('logout/', blog_views.custom_logout, name='logout'),
     #path('google_login/', blog_views.google_login, name='google_login'),
     #path('google_signup/', blog_views.google_signup, name='google_signup'),
-    path('accounts/profile/', blog_views.profile, name='profile'),
+    #path('accounts/profile/', blog_views.profile, name='profile'),
     #path("upload/", custom_upload_function, name="custom_upload_file"),
     path('ckeditor/', include('django_ckeditor_5.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

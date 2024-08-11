@@ -19,6 +19,12 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
 
+class Location(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
 class Post1(models.Model):
     title = models.CharField(max_length=200)
     #contenttinMCE = HTMLField()
