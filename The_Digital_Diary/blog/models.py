@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.html import strip_tags
+import pycountry
+from django import forms
 #from .signals import *
 #from tinymce.models import HTMLField
 from django_ckeditor_5.fields import CKEditor5Field
@@ -16,8 +18,22 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     # Add any other fields you want
 
+    @property
+    def get_profile_picture_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        else:
+            return '/media/profile_pictures/image.jpg'
+
     def __str__(self):
         return f'{self.user.username} Profile'
+
+class LocationForm(forms.Form):
+    country = forms.ChoiceField(
+        choices=[(country.alpha_2, country.name) for country in pycountry.countries],
+        required=True,
+        label="Select Country"
+    )
 
 class Location(models.Model):
     name = models.CharField(max_length=100)

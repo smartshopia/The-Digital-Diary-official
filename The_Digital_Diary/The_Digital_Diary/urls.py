@@ -25,7 +25,9 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('blog.urls')),
+    path('', include('accounts.urls')),
     path('profile/', blog_views.profile, name='profile'),
+    path("accounts/", include("accounts.urls")),  # new
     path("accounts/", include("django.contrib.auth.urls")),
     path('logout/', blog_views.custom_logout, name='logout'),
     #path('google_login/', blog_views.google_login, name='google_login'),

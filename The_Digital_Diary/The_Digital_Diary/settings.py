@@ -174,6 +174,9 @@ STATIC_URL = '/static/'
 # Define STATIC_ROOT for collecting static files during deployment
 STATIC_ROOT = os.path.join(BASE_DIR1, 'staticfiles')
 
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
