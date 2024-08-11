@@ -11,6 +11,8 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 
+#deta token: AkDWY6vo_nXc6aWSaxcNkBAETFiJW78BoYWDHmYdD
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
