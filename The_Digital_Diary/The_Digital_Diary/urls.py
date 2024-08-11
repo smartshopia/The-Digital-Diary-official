@@ -20,15 +20,15 @@ from django.urls import path, include
 from blog import views as blog_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('blog.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
     path('logout/', blog_views.custom_logout, name='logout'),
-    path('google_login/', blog_views.google_login, name='google_login'),
-    path('google_signup/', blog_views.google_signup, name='google_signup'),
-    path('posts_list/', blog_views.post_list, name='post_list'),
+    #path('google_login/', blog_views.google_login, name='google_login'),
+    #path('google_signup/', blog_views.google_signup, name='google_signup'),
     path('accounts/profile/', blog_views.profile, name='profile'),
     #path("upload/", custom_upload_function, name="custom_upload_file"),
     path('ckeditor/', include('django_ckeditor_5.urls')),

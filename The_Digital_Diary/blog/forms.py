@@ -4,6 +4,16 @@ from django.contrib.auth.forms import UserCreationForm
 #from tinymce.widgets import TinyMCE
 from .models import *
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture', 'bio', 'location', 'birth_date']
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -23,9 +33,19 @@ class PostForm(forms.ModelForm):
     )
     class Meta:
         model = Post
+        fields = ['title','author', 'content', 'image','is_published', 'categories']
+  
+class PostAdminForm(forms.ModelForm):
+    #content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    class Meta:
+        model = Post
         fields = ['title','author', 'content', 'image', 'short_description','likes','share_count','is_published', 'categories']
   
-
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category

@@ -76,6 +76,20 @@
 </nav>
 </head>
 <body>
+  {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <h2>Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ u_form|crispy }}
+        {{ p_form|crispy }}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}
   <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
     <h2>Welcome, {{ user.username }}!</h2>
     <form method="POST" enctype="multipart/form-data">
@@ -83,8 +97,7 @@
       {{ form.as_p }}
       <button type="submit">Update Profile</button>
     </form>
-    <p>This is your profile page.</p>
-    <p>"{% url 'post_list' %}"</p>  
-    <a href="{% url 'post_list' %}">Back to Blog</a>
+    <p>This is your profile page.</p>  
+    <a href="{% url 'home' %}">Back to Home</a>
 </body>
 </html>

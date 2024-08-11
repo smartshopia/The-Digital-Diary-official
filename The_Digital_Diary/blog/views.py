@@ -4,9 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from firebase_config import auth
 from django.contrib import messages
+from django.db.models import Count
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from .models import *
 from .forms import *
+from .signals import *
 
 # Create your views here.
 
@@ -31,6 +34,10 @@ def about(request):
 
 def blog(request):
     posts = Post.objects.all()
+     # Pagination setup
+    paginator = Paginator(posts, 10)  # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
    #popular_posts = Post.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')[:3]  # Adjust the number to show more/less posts
     popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:6]
@@ -54,7 +61,7 @@ def contact(request):
 def settings(request):
     return render(request, 'blog/settings.html')
 
-def post_list(request):
+""" def post_list(request):
     posts = Post.objects.all()
     categories = Category.objects.all()
     latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
@@ -67,8 +74,37 @@ def post_list(request):
         'popular_posts': popular_posts
     }
 
+    return render(request, 'blog/index.html', context) """
+def post_list(request):
+    # Retrieve all posts (consider optimizing this query)
+    all_posts = Post.objects.all()
+    
+    # Pagination setup
+    paginator = Paginator(all_posts, 10)  # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Retrieve all categories
+    categories = Category.objects.all()
+    
+    # Retrieve the latest 10 posts ordered by published date
+    latest_posts = Post.objects.order_by('-published_date')[:10]
+    
+    # Retrieve the top 6 most popular posts based on the number of likes
+    popular_posts = Post.objects.annotate(
+        like_count=Count('likes')
+    ).order_by('-like_count')[:6]
+
+    # Prepare context data for rendering the template
+    context = {
+        'page_obj': page_obj,
+        'categories': categories,
+        'latest_posts': latest_posts,
+        'popular_posts': popular_posts
+    }
+
+    # Render the template with the context data
     return render(request, 'blog/index.html', context)
-    return render(request, 'blog/index.html', {'latest_posts': latest_posts, 'categories': categories, 'popular_posts': popular_posts})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -220,28 +256,22 @@ def logout(request):
         messages.error(request, str(e))
     return redirect('login') """
 
-def google_login(request):
+@login_required
+def profile(request):
     if request.method == 'POST':
-        import json
-        data = json.loads(request.body)
-        id_token = data.get('idToken')
-        try:
-            user = auth.sign_in_with_id_token(id_token)
-            # Implement your login logic here, e.g., create a session or user model
-            return JsonResponse({'success': True})
-        except:
-            return JsonResponse({'success': False}, status=400)
-    return JsonResponse({'success': False}, status=400)
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
 
-def google_signup(request):
-    if request.method == 'POST':
-        import json
-        data = json.loads(request.body)
-        id_token = data.get('idToken')
-        try:
-            user = auth.sign_in_with_id_token(id_token)
-            # Implement your signup logic here, e.g., create a user record
-            return JsonResponse({'success': True})
-        except:
-            return JsonResponse({'success': False}, status=400)
-    return JsonResponse({'success': False}, status=400)
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'registration/profile.html', context)

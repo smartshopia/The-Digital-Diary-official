@@ -7,7 +7,7 @@ from django.db import models
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
     #pass
-    form = PostForm
+    form = PostAdminForm
     list_display = ('title', 'author', 'display_categories', 'images','created_at', 'published_date', 'is_published')
     filter_horizontal = ('categories',)
     search_fields = ('title', 'content',)
