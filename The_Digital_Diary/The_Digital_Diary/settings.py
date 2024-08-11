@@ -91,6 +91,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "blog.middleware.RedirectToPreviousPageMiddleware",
 ]
 
 ROOT_URLCONF = "The_Digital_Diary.urls"
@@ -154,7 +155,8 @@ TIME_ZONE = "Asia/Karachi"
 
 USE_I18N = True
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"  # new
 
 USE_TZ = True
 

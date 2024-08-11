@@ -7,6 +7,13 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
 class Post1(models.Model):
     title = models.CharField(max_length=200)
     #contenttinMCE = HTMLField()
@@ -37,7 +44,7 @@ class Post(models.Model):
     share_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    published_date = models.DateTimeField(null=True, blank=True)
+    published_date = models.DateTimeField(null=True, blank=True, auto_now=True)
     #slug = models.SlugField(max_length=200, unique=True)
 
     def __str__(self):

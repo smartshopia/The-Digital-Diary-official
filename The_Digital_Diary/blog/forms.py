@@ -9,6 +9,11 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('text',)
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture']
+
 class PostForm(forms.ModelForm):
     #content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
     categories = forms.ModelMultipleChoiceField(

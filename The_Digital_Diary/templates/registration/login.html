@@ -88,7 +88,7 @@
 
 
 
-    <form action="/" method="post" id="login-form">
+    <form method="post" id="login-form" action="{% url 'login' %}?next={{ request.GET.next }}">
         {% csrf_token %}    
         <!-- Username field -->
         <div class="form-row">
@@ -106,6 +106,7 @@
         <div class="submit-row">
             <input type="submit" value="Log in">
         </div>
+        <a style="text-align: center;" href="">Don't have an account? Register</a>
     </form>
     
     

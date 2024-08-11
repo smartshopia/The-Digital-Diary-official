@@ -1,10 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Profile</title>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | The Digital Diary</title>
  <!--  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
@@ -74,17 +74,83 @@
     </ul>
   </div>
 </nav>
-</head>
-<body>
-  <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
-    <h2>Welcome, {{ user.username }}!</h2>
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Update Profile</button>
-    </form>
-    <p>This is your profile page.</p>
-    <p>"{% url 'post_list' %}"</p>  
-    <a href="{% url 'post_list' %}">Back to Blog</a>
+  <!--Main Section
+  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center">
+    <div class="container">
+      <h1 class="display-4">Welcome to The Digital Diary</h1>
+      <p class="lead">Your go-to blog for the latest in digital trends and insights.</p>
+    </div>
+  </div>-->
+
+  <!-- Main Banner -->
+   <!--   --> 
+  <!-- Main Banner background-image: url('desktop.jpg'); -->
+  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center" style=" background-size: cover; background-position: center; color: white;">
+    <div class="container" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px;">
+      <h1 class="display-4">Welcome to The Digital Diary</h1>
+      <p class="lead">Your go-to blog for the latest in digital trends and insights.</p>
+    </div>
+  </div>  
+  
+
+
+    <!-- Subscription Box -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Subscribe to Our Newsletter</h2>
+        <form class="form-inline justify-content-center">
+          <input type="email" class="form-control mb-2 mr-sm-2" placeholder="Enter your email">
+          <button type="submit" class="btn btn-outline-primary mb-2">Subscribe</button>
+        </form>
+      </div>
+      <!-- Footer -->
+    <footer class="jumbotron jumbotron-fluid  text-lg-start">
+    <div class="container p-4">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+          <h5 class="text-uppercase">The Digital Diary</h5>
+          <p>
+            Stay updated with the latest trends in the digital world. Follow us on social media and subscribe to our newsletter for more updates.
+          </p>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Quick Links</h5>
+          <ul class="list-unstyled mb-0">
+             <li>
+              <a href="#" class="text-dark">Home</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark">About</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark">Blog</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark">Contact</a>
+            </li> 
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Follow Us</h5>
+          <ul class="list-unstyled">
+            <li>  
+              <a href="#" class="text-dark"><i class="fab fa-facebook-f mr-2"></i> Facebook</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark"><i class="fab fa-twitter mr-2"></i> Twitter</a>
+            </li>
+            <li>
+              <a href="#" class="text-dark"><i class="fab fa-instagram mr-2"></i> Instagram</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="text-center p-3">
+      © 2024 The Digital Diary. All rights reserved.
+    </div>
+  </footer>
+
+
+ 
 </body>
 </html>

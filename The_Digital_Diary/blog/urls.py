@@ -1,12 +1,24 @@
 from django.urls import path, include
+from django.conf import global_settings  # This would override the correct settings from django.con
+from django.conf.urls.static import static
 from . import views
+from .views import *
 
 urlpatterns = [
     path('', views.post_list, name='home'),
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('post/new/', views.publish_post, name='publish_post'),
     path('post/<int:pk>/like/', views.like_post, name='like_post'),
-    path('category/', views.category_list, name='category_list'),
-    path('category/<int:pk>/', views.category_posts, name='category_posts'),
+    path('categories/<int:pk>/', views.category_posts, name='category_posts'),
     path('ckeditor/', include('django_ckeditor_5.urls')),
+    path('about/', about, name='about'),
+    path('blog/', blog, name='blog'),
+    path('contact/', contact, name='contact'),
+    path('publish/', publish_post, name='publish_post'),
+    path('profile/', profile, name='profile'),
+    path('settings/', settings, name='settings'),
+    path('categories/', category_list, name='category_list'),
+    path('search/', search, name='search'),
 ]
+if global_settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

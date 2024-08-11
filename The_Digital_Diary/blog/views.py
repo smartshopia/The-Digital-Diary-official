@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, HttpResponseRedirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .firebase_config import auth
+from firebase_config import auth
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import *
@@ -11,18 +11,55 @@ from .forms import *
 # Create your views here.
 
 @login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=request.user.profile)
+    
+    return render(request, 'profile.html', {'form': form})
+
+@login_required
 def profile(request):
     return render(request, 'registration/profile.html')
 
 def about(request):
     return render(request, 'blog/about.html')
 
+def blog(request):
+    posts = Post.objects.all()
+    latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
+   #popular_posts = Post.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')[:3]  # Adjust the number to show more/less posts
+    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:6]
+    context = {
+        'posts': posts,
+        'latest_posts': latest_posts,
+        'popular_posts': popular_posts
+    }
+
+    return render(request, 'blog/blog.html', context)
+
+def search(request):
+    query = request.GET.get('q')
+    # Add search logic here
+    return render(request, 'search_results.html', {'query': query})
+
+
+def contact(request):
+    return render(request, 'blog/contact.html')
+
+def settings(request):
+    return render(request, 'blog/settings.html')
+
 def post_list(request):
     posts = Post.objects.all()
     categories = Category.objects.all()
-    latest_posts = Post.objects.order_by('-published_date')[:3]  # Adjust the number to show more/less posts
+    latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
    #popular_posts = Post.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')[:3]  # Adjust the number to show more/less posts
-    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:3]
+    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:6]
     context = {
         'posts': posts,
         'categories': categories,
@@ -121,7 +158,7 @@ def like_post1(request, pk):
     else:
         post.likes.add(request.user)
     return redirect('post_detail', pk=pk)
-@login_required
+#@login_required
 def like_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if post.likes.filter(id=request.user.id).exists():
@@ -129,6 +166,7 @@ def like_post(request, pk):
     else:
         post.likes.add(request.user)
     return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
+
 def custom_login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -142,7 +180,13 @@ def custom_login_view(request):
             # Handle login failure
             pass
     return render(request, 'registration/login.html')
-def register(request):
+
+def custom_logout(request):
+    logout(request)
+    next_page = request.GET.get('next', '/')  # Default to '/' if 'next' is not provided
+    return redirect(next_page)
+
+""" def register(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -174,7 +218,7 @@ def logout(request):
         messages.success(request, 'Logged out successfully.')
     except Exception as e:
         messages.error(request, str(e))
-    return redirect('login')
+    return redirect('login') """
 
 def google_login(request):
     if request.method == 'POST':
