@@ -1,4 +1,4 @@
-import pyrebase
+#import pyrebase
 
 config = {
     "apiKey": "AIzaSyCgFGjPfhajp4FhzZsyjOiP5Hv-XcvFDT0",
@@ -12,5 +12,5 @@ config = {
   
 }
 
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
+#firebase = pyrebase.initialize_app(config)
+#auth = firebase.auth()
