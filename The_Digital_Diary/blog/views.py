@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from geopy.geocoders import Nominatim
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from firebase_config import auth
+#from firebase_config import auth
 from django.contrib import messages
 from django.db.models import Count
 from django.core.paginator import Paginator

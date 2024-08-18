@@ -13,4 +13,5 @@ config = {
 }
 
 #firebase = pyrebase.initialize_app(config)
-#auth = firebase.auth()
+firebase = 1
+auth = firebase.auth()
