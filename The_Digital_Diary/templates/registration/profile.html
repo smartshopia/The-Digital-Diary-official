@@ -87,22 +87,7 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ u_form|crispy }} <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
-        {{ p_form|crispy }}<div id="map" style="height: 400px;"></div>
-        <div id="map" style="height: 400px;"></div>
-
-        <script>
-           
-            var map = L.map('map').setView([], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 199,
-                attribution: 'hy'
-            }).addTo(map);
-        
-            var marker = L.marker([{ latitude }, { longitude }]).addTo(map)
-              .bindPopup('You are here.')
-              .openPopup();
-        </script>
-        
+        {{ p_form|crispy }}       
               
         <button type="submit" class="btn btn-primary">Update</button> </br>
         <p><a href="{% url 'password_change' %}" class="btn btn-primary" style="justify-content: center;">Password Change</a></p>
