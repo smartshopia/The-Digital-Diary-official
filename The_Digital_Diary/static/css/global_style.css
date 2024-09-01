@@ -5,4 +5,69 @@
 	padding: 0;	
 	font-family: Raleway, sans-serif;
 }
+.container-post {
+    max-width: 1100px;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.image-container-post {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Navbar styles */
+.navbar {
+  padding: 0.5rem 1rem;
+}
 
+.navbar .navbar-nav .nav-item {
+  margin-left: 15px;
+}
+
+.form-inline .input-group {
+  display: flex;
+}
+
+.form-inline .search-container {
+  position: relative;
+   /* Adjust as needed */
+}
+
+.form-inline .search-input {
+  width: calc(100% - 50px); /* Adjust to make space for the button */
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.form-inline .search-button {
+  border: none;
+  background-color: transparent;
+}
+
+.form-inline .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Profile image */
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Animation */
+@keyframes search-focus {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.form-control:focus ~ .search-button .icon {
+  animation: search-focus 0.6s ease-in-out;
+}

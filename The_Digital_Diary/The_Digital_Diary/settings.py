@@ -27,6 +27,8 @@ TEMPLATES_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+GEOAPIFY_API_KEY = '952cdb76db284312bfed3445441cbc9b'
+
 
 CKEDITOR_5_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
@@ -84,6 +86,8 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 
 MIDDLEWARE = [

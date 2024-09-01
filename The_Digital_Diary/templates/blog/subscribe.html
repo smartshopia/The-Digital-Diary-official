@@ -1,0 +1,35 @@
+{% extends "base_subscribe.html" %}
+{% load static %}
+{% block title %}
+Contact us | The Digital Diary
+{% endblock %}
+{% block content %}
+ <!-- Main Banner -->
+ <div id="mainBanner" class="jumbotron jumbotron-fluid text-center" style="background-image: url('/static/images/img/desktop.png'); background-size: cover; background-position: center; color: white;">
+    <div class="container" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px;">
+      <h1 class="display-4">Subscribe</h1>
+      <p class="lead"> Subscribe to our newsletter, follow us on social media, and be a part of our vibrant community.<br> Together, let's explore the limitless possibilities of the digital world.</p>
+    </div>
+  </div>  
+{% if messages %}
+ 
+
+<div class="container mt-4">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+<h2 style="text-align: center;">Subscribe Now!</h2>
+<form class="form-inline justify-content-center" method="post" action="{% url 'subscribe' %}" autocomplete="on" style="margin: 50px; align-items: flex-start;">
+    {% csrf_token %}
+    <div  class="">
+        <input type="text" placeholder="Email" class="login__input" name="Email" autofocus autocapitalize="none" autocomplete="email" maxlength="150" style="height: 40px; padding: 0px;">
+    </div>
+    <button type="submit" class="btn btn-outline-primary mb-2" style="margin-left: 5px;">Subscribe</button>
+</form>
+
+
+{% endblock %}

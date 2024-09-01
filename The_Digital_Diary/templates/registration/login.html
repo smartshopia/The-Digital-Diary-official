@@ -1,30 +1,9 @@
+{% extends "baselogin.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en-us" dir="ltr">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log in</title>
-    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
-    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css'>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-</head>
-
-<body style="
- background-image: url('/static/images/background-login.jpg');
- background-size: cover; 
- overflow: auto; 
- position: relative; 
- height: 100%; 
-height: 100%;
-overflow: hidden;
-
-@media (max-width: 768px) {
-  font-size: 50%;
-}">
+{% block title %}
+Home | The Digital Diary
+{% endblock %}
+{% block content %}
     <div class="container">
         <div class="screen">
             <div class="screen__content">
@@ -65,7 +44,4 @@ overflow: hidden;
         </div>
     </div>
     <!-- partial -->
-      
-</body>
-</html>
-
+{% endblock %}

@@ -1,204 +1,90 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
-    <link rel="stylesheet" href="index.html">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'home' %}">The Digital Diary</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'category_list' %}">Categories</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'blog' %}">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'publish_post' %}">Publish</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search' %}">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-      <!-- Profile Dropdown -->
-      {% if user.is_authenticated %}
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{{ user.profile.profile_picture.url }}" alt="Profile" style="width: auto; height: 40px; border-radius: 50%;"> {{ user.username }}
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-            <a class="dropdown-item" href="{% url 'settings' %}">Settings</a>
-            <div class="dropdown-divider"></div>
-            <form id="logout-form" action="{% url 'logout' %}" method="post">
-              {% csrf_token %}
-              <button type="submit" class="dropdown-item">Logout</button>
-            </form>
-          </div>
-        </li>
-        {% else %}
-        <p>You are not logged in</p><br/>
-        <a href="{% url 'login' %}?next={{ request.get_full_path }}">Log In</a>
-        {% endif %}
-      </ul>
+{% block title %}
+About Us | The Digital Diary
+{% endblock %}
+{% block content %}
+  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center" style="background-image: url('/static/images/img/desktop.png'); background-size: cover; background-position: center; color: white;">
+    <div class="container" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px;">
+      <h1 class="display-4">About Us</h1>
+      <p class="lead"></p>
     </div>
-  </nav>
-      
+  </div> 
+    <div class="container-post">
+        <!-- Vision Section -->
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h2>About The Digital Diary</h2>
+          <p>At The Digital Diary, we are passionate about the ever-evolving world of technology and digital trends. Our mission is to bring you the latest insights, news, and analysis from the digital realm, helping you stay informed and ahead of the curve.</p>
+        </div>
+      </div>
 
-  <!-- About Us Content -->
-  <div class="container my-5">
-    <h1 class="text-center mb-4">About Us</h1>
+      <!-- Vision Section -->
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h2>Our Vision</h2>
+          <p>We envision a world where technology and digital advancements are accessible and understandable to everyone. Our goal is to bridge the gap between complex digital concepts and everyday understanding, empowering our readers to make informed decisions in their personal and professional lives.</p>
+        </div>
+      </div>
 
-    <!-- Vision Section -->
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h2>Welcome to The Digital Diary</h2>
-        <p>At The Digital Diary, we are passionate about the ever-evolving world of technology and digital trends. Our mission is to bring you the latest insights, news, and analysis from the digital realm, helping you stay informed and ahead of the curve.</p>
+      <!-- What We Offer Section -->
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h2>What We Offer</h2>
+          <ul>
+            <li><strong>In-Depth Articles:</strong> Our team of expert writers and contributors provide well-researched and detailed articles on a wide range of topics, including cybersecurity, digital marketing, artificial intelligence, blockchain, and more.</li>
+            <li><strong>Latest News:</strong> Stay updated with the latest happenings in the tech world. From groundbreaking innovations to industry shifts, we bring you the news that matters most.</li>
+            <li><strong>Expert Analysis:</strong> Our analyses delve deep into the implications of digital trends and technologies, offering unique perspectives and thought-provoking insights.</li>
+            <li><strong>How-To Guides:</strong> Whether you're a tech novice or a seasoned professional, our how-to guides offer step-by-step instructions and practical tips to help you navigate the digital landscape with confidence.</li>
+            <li><strong>Community Engagement:</strong> We believe in the power of community. Join the conversation, share your thoughts, and connect with like-minded individuals through our comments sections and social media platforms.</li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!-- Vision Section -->
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h2>Our Vision</h2>
-        <p>We envision a world where technology and digital advancements are accessible and understandable to everyone. Our goal is to bridge the gap between complex digital concepts and everyday understanding, empowering our readers to make informed decisions in their personal and professional lives.</p>
+      <!-- Our Team Section -->
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h2>Our Team</h2>
+          <p>The Digital Diary is powered by a dedicated team of tech enthusiasts, writers, and industry experts. Our diverse backgrounds and collective expertise enable us to provide high-quality content that caters to a wide audience.</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'images/team-pics/Fida.png' %}" class="rounded-circle mb-3" alt="Fida Ur Rehman" width="150" height="150">
+          <h5>Fida-Ur-Rehman</h5>
+          <p>Founder & Developer</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'images/team-pics/Jaweria.png' %}" class="rounded-circle mb-3" alt="Jaweria Rehman" width="150" height="150">
+          <h5>Jaweria Rehman</h5>
+          <p>Senior Tech Writer</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'images/team-pics/Nabila.png' %}" class="rounded-circle mb-3" alt="Nabila Rehman" width="150" height="150">
+          <h5>Nabila Rehman</h5>
+          <p>Digital Marketing Specialist</p>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'images/team-pics/AQ.png' %}" class="rounded-circle mb-3" alt="Abdul Qadeer Khan" width="150" height="150">
+          <h5>Abdul Qadeer Khan</h5>
+          <p>Cybersecurity Analyst</p>
+        </div>
       </div>
-    </div>
 
-    <!-- What We Offer Section -->
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h2>What We Offer</h2>
-        <ul>
-          <li><strong>In-Depth Articles:</strong> Our team of expert writers and contributors provide well-researched and detailed articles on a wide range of topics, including cybersecurity, digital marketing, artificial intelligence, blockchain, and more.</li>
-          <li><strong>Latest News:</strong> Stay updated with the latest happenings in the tech world. From groundbreaking innovations to industry shifts, we bring you the news that matters most.</li>
-          <li><strong>Expert Analysis:</strong> Our analyses delve deep into the implications of digital trends and technologies, offering unique perspectives and thought-provoking insights.</li>
-          <li><strong>How-To Guides:</strong> Whether you're a tech novice or a seasoned professional, our how-to guides offer step-by-step instructions and practical tips to help you navigate the digital landscape with confidence.</li>
-          <li><strong>Community Engagement:</strong> We believe in the power of community. Join the conversation, share your thoughts, and connect with like-minded individuals through our comments sections and social media platforms.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Our Team Section -->
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h2>Our Team</h2>
-        <p>The Digital Diary is powered by a dedicated team of tech enthusiasts, writers, and industry experts. Our diverse backgrounds and collective expertise enable us to provide high-quality content that caters to a wide audience.</p>
-      </div>
-      <div class="col-md-4 text-center">
-        <img src="fidi.jpg" class="rounded-circle mb-3" alt="Your Name" width="150" height="150">
-        <h5>Fida-Ur-Rehman</h5>
-        <p>Founder & Developer</p>
-      </div>
-      <div class="col-md-4 text-center">
-        <img src="jawer.jpg" class="rounded-circle mb-3" alt="Team Member 1" width="150" height="150">
-        <h5>Jaweria Rehman</h5>
-        <p>Senior Tech Writer</p>
-      </div>
-      <div class="col-md-4 text-center">
-        <img src="nabila.jpg" class="rounded-circle mb-3" alt="Team Member 2" width="150" height="150">
-        <h5>Nabila-Ur-Rehman</h5>
-        <p>Digital Marketing Specialist</p>
-      </div>
-      <div class="col-md-4 text-center">
-        <img src="cuber.jpg" class="rounded-circle mb-3" alt="Team Member 3" width="150" height="150">
-        <h5>Abdul Qadeer Khan</h5>
-        <p>Cybersecurity Analyst</p>
-      </div>
-    </div>
-
-    <!-- Our Journey Section -->
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <h2>Our Journey</h2>
-        <p>Founded in 2020, The Digital Diary started as a small blog with a big vision. Over the years, we have grown into a trusted source of digital knowledge, reaching readers from all corners of the globe. Our commitment to quality and our passion for technology continue to drive us forward.</p>
-      </div>
-    </div>
-
-    <!-- Join Us Section -->
-    <div class="row mb-5">
-      <div class="col-md-12 text-center">
-        <h2>Join Us</h2>
-        <p>We invite you to join us on this exciting journey. Subscribe to our newsletter, follow us on social media, and be a part of our vibrant community. Together, let's explore the limitless possibilities of the digital world.</p>
-        <a href="#" class="btn btn-primary">Subscribe to Newsletter</a>
+      <!-- Our Journey Section -->
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <h2>Our Journey</h2>
+          <p>Founded in 2020, The Digital Diary started as a small blog with a big vision. Over the years, we have grown into a trusted source of digital knowledge, reaching readers from all corners of the globe. Our commitment to quality and our passion for technology continue to drive us forward.</p>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Footer -->
-  <footer class="jumbotron jumbotron-fluid text-center text-lg-start">
-    <div class="container p-4">
-      <div class="row">
-        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-          <h5 class="text-uppercase">The Digital Diary</h5>
-          <p>
-            Stay updated with the latest trends in the digital world. Follow us on social media and subscribe to our newsletter for more updates.
-          </p>
+        <!-- Join Us Section -->
+        <div class="row mb-5">
+          <div class="col-md-12 text-center">
+            <h2>Join Us</h2>
+            <p>We invite you to join us on this exciting journey. Subscribe to our newsletter, follow us on social media, and be a part of our vibrant community.<br> Together, let's explore the limitless possibilities of the digital world.</p>
+            <a href="" class="btn btn-primary">Subscribe to Newsletter</a>
+          </div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Quick Links</h5>
-          <ul class="list-unstyled mb-0">
-            <li>
-              <a href="#" class="text-dark">Home</a>
-            </li>
-            <li>
-              <a href="#" class="text-dark">About</a>
-            </li>
-            <li>
-              <a href="#" class="text-dark">Blog</a>
-            </li>
-            <li>
-              <a href="#" class="text-dark">Contact</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Follow Us</h5>
-          <ul class="list-unstyled">
-            <li>
-              <a href="#" class="text-dark"><i class="fab fa-facebook-f mr-2"></i> Facebook</a>
-            </li>
-            <li>
-              <a href="#" class="text-dark"><i class="fab fa-twitter mr-2"></i> Twitter</a>
-            </li>
-            <li>
-              <a href="#" class="text-dark"><i class="fab fa-instagram mr-2"></i> Instagram</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="text-center p-3">
-      © 2024 The Digital Diary. All rights reserved.
-    </div>
-  </footer>
-
-
-    <!-- Font Awesome for social media icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</body>
-</html>
+      
+{% endblock %}

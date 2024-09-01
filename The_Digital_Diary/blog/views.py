@@ -24,37 +24,78 @@ def update_profile(request):
     else:
         form = UserProfileForm(instance=request.user.profile)
     
-    return render(request, 'profile.html', {'form': form})
+    return render(request, 'registration/profile.html', {'form': form})
 
 @login_required
 def profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    
+    return render(request, 'registration/profile.html', {'form': form})
+
     return render(request, 'registration/profile.html')
 
 def about(request):
     return render(request, 'blog/about.html')
 
+def example(request):
+    return render(request, 'extras/1.html')
+
 def blog(request):
     posts = Post.objects.all()
      # Pagination setup
-    paginator = Paginator(posts, 10)  # Show 10 posts per page
+    posts = Post.objects.all().order_by('-published_date')  # Order by publish date
+    paginator = Paginator(posts, 6)  # Show 10 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
+    paginator_latest = Paginator(latest_posts, 6)  # Show 10 posts per page
+    page_number_latest = request.GET.get('page')
+    page_obj_latest = paginator_latest.get_page(page_number_latest)
    #popular_posts = Post.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')[:3]  # Adjust the number to show more/less posts
-    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:6]
+    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:3]
     context = {
         'posts': posts,
         'latest_posts': latest_posts,
-        'popular_posts': popular_posts
+        'popular_posts': popular_posts,
+        'page_obj': page_obj,
+        'page_obj_latest': page_obj_latest
     }
 
     return render(request, 'blog/blog.html', context)
 
 def search(request):
-    query = request.GET.get('q')
-    # Add search logic here
-    return render(request, 'search_results.html', {'query': query})
+    query = request.GET.get('q', '')
+    if query:
+        # Filter posts based on the search query
+        posts = Post.objects.filter(title__icontains=query)
+    else:
+        posts = Post.objects.none()  # No posts to show if no query
 
+    return render(request, 'search_results.html', {
+        'posts': posts,
+        'query': query,
+    })
+
+def subscribe(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Thank you for subscribing!')
+            return redirect('subscribe')  # Redirect to the same page or another page
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = SubscriptionForm()
+
+    return render(request, 'blog/subscribe.html', {'form': form})
 
 def contact(request):
     return render(request, 'blog/contact.html')
@@ -62,20 +103,6 @@ def contact(request):
 def settings(request):
     return render(request, 'blog/settings.html')
 
-""" def post_list(request):
-    posts = Post.objects.all()
-    categories = Category.objects.all()
-    latest_posts = Post.objects.order_by('-published_date')[:10]  # Adjust the number to show more/less posts
-   #popular_posts = Post.objects.annotate(total_likes=Count('likes')).order_by('-total_likes')[:3]  # Adjust the number to show more/less posts
-    popular_posts = Post.objects.annotate(like_count=models.Count('likes')).order_by('-like_count')[:6]
-    context = {
-        'posts': posts,
-        'categories': categories,
-        'latest_posts': latest_posts,
-        'popular_posts': popular_posts
-    }
-
-    return render(request, 'blog/index.html', context) """
 def post_list(request):
     # Retrieve all posts (consider optimizing this query)
     all_posts = Post.objects.all()
@@ -135,33 +162,6 @@ def post_detail(request, pk):
     })
 
 
-def signup1(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-            return redirect('post_list')
-    else:
-        form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
-""" @login_required
-def publish_post(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('post_list')
-    else:
-        form = PostForm()
-    return render(request, 'blog/publish_post.html', {'form': form}) """
-
 def category_list(request, pk=None):
     print(f"Received pk: {pk}")
     if pk is None:
@@ -190,7 +190,7 @@ def publish_post(request):
     return render(request, 'blog/publish_post.html', {'form': form})
 
 @login_required
-def like_post1(request, pk):
+def like_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
@@ -198,7 +198,7 @@ def like_post1(request, pk):
         post.likes.add(request.user)
     return redirect('post_detail', pk=pk)
 #@login_required
-def like_post(request, pk):
+def like_post1(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
@@ -305,3 +305,13 @@ def update_profile(request):
     else:
         form = UserProfileForm(instance=request.user.userprofile)
     return render(request, 'registration/profile.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Home | The Digital Diary
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Search Results for "{{ query }}"</h1>
+    <div class="row">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card mb-4">
+                    {% if post.image %}
+                    <a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;"><img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" height="200"></a>
+                    {% else %}
+                    <a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;"><img src="https://loremflickr.com/320/240/brazil,rio" class="card-img-top" alt="Default Image" height="200"></a>
+                    {% endif %}
+                    <div class="card-body" style="height: 350px;">
+                        <h5 class="card-title" ><a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;">{{ post.title }}</a></h5>
+                        <p class="card-text">{{ post.short_description }}</p>
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-outline-primary" style="flex-direction: column; border: none;">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    No posts found for your search.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

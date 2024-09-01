@@ -1,35 +1,11 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Home | The Digital Diary{% endblock %}</title>
- <!--  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
-  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
-  <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5"> -->
-  <meta name="theme-color" content="#ffffff">
-  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/global_style.css' %}">
-  <script src="https://kit.fontawesome.com/e024778736.js" crossorigin="anonymous"></script>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-  <!--Main Section
-  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center">
-    <div class="container">
-      <h1 class="display-4">Welcome to The Digital Diary</h1>
-      <p class="lead">Your go-to blog for the latest in digital trends and insights.</p>
-    </div>
-  </div>-->
-
-  <!-- Main Banner background-image: url('desktop.jpg'); -->
-  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center" style=" background-size: cover; background-position: center; color: white;">
+{% block title %}
+Home | The Digital Diary
+{% endblock %}
+{% block content %}
+  <!-- Main Banner  -->
+  <div id="mainBanner" class="jumbotron jumbotron-fluid text-center" style="background-image: url('/static/images/img/desktop.png'); background-size: cover; background-position: center; color: white;">
     <div class="container" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px;">
       <h1 class="display-4">Welcome to The Digital Diary</h1>
       <p class="lead">Your go-to blog for the latest in digital trends and insights.</p>
@@ -43,12 +19,12 @@
           <div class="col-md-4">
               <div class="card mb-4">
                   {% if post.image %}
-                  <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" height="200">
+                  <a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;"><img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" height="200"></a>
                   {% else %}
-                  <img src="https://loremflickr.com/320/240/brazil,rio" class="card-img-top" alt="Default Image" height="200">
+                  <a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;"><img src="https://loremflickr.com/320/240/brazil,rio" class="card-img-top" alt="Default Image" height="200"></a>
                   {% endif %}
-                  <div class="card-body">
-                      <h5 class="card-title">{{ post.title }}</h5>
+                  <div class="card-body" style="height: 350px;">
+                      <h5 class="card-title" ><a href="{% url 'post_detail' post.pk %}" style="color: black; text-decoration: none;">{{ post.title }}</a></h5>
                       <p class="card-text">{{ post.short_description }}</p>
                       <a href="{% url 'post_detail' post.pk %}" class="btn btn-outline-primary">Read More</a>
                   </div>
@@ -66,7 +42,7 @@
                   {% else %}
                   <img src="https://loremflickr.com/320/240/paris" class="card-img-top" alt="Default Image" height="200">
                   {% endif %}
-                  <div class="card-body">
+                  <div class="card-body" style="height: 350px;">
                       <h5 class="card-title">{{ post.title }}</h5>
                       <p class="card-text">{{ post.short_description }}</p>
                       <a href="{% url 'post_detail' post.pk %}" class="btn btn-outline-primary">Read More</a>
@@ -91,5 +67,4 @@
       {% endfor %}
   </div>
 </div>
-</body>
-</html>
+{% endblock %}

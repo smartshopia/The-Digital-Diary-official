@@ -1,100 +1,31 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Profile</title>
-    <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <!--  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
-  <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
-  <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5"> -->
-  <meta name="theme-color" content="#ffffff">
-  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-<!--    <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{% url 'home' %}">The Digital Diary</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'category_list' %}">Categories</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'about' %}">About</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'blog' %}">Blog</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'publish_post' %}">Publish</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search' %}">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <!-- Profile Dropdown -->
-    {% if user.is_authenticated %}
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: auto; height: 40px; border-radius: 50%;"> {{ user.username }}
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-          <a class="dropdown-item" href="{% url 'settings' %}">Settings</a>
-          <div class="dropdown-divider"></div>
-          <form id="logout-form" action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="dropdown-item">Logout</button>
-          </form>
-        </div>
-      </li>
-      {% else %}
-      <p>You are not logged in</p><br>
-      <a href="{% url 'login' %}?next={{ request.get_full_path }}">Log In</a>
-      {% endif %}
-    </ul>
-  </div>
-</nav>
-</head>
-<body>
-
-{% load crispy_forms_tags %}
-
+{% block title %}
+{{ user.username }}'s Profile | The Digital Diary
+{% endblock %}
 {% block content %}
+
+
 <div class="container">
     <h2 style="text-align: center;" >Profile</h2>
+
+    
+{% load crispy_forms_tags %}
     <form method="POST" enctype="multipart/form-data">
+
         {% csrf_token %}
-        {{ u_form|crispy }} <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+        {{ u_form|crispy }} {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" style="width: auto; height: 40px; border-radius: 50%;">
+        {% else %}
+        <img src="{% static 'images/tdd.jpg' %}" alt="Default Profile" style="width: auto; height: 40px; border-radius: 50%;">
+        {% endif %}
         {{ p_form|crispy }}       
               
         <button type="submit" class="btn btn-primary">Update</button> </br>
-        <p><a href="{% url 'password_change' %}" class="btn btn-primary" style="justify-content: center;">Password Change</a></p>
+        <p><a href="{% url 'password_change' %}" class="btn btn-primary" style="justify-content: center; margin-top: 2px;">Password Change</a></p>
     </form>
 </div>
 {% endblock %}
       
     <!-- <a href="{% url 'home' %}" style="justify-items: center;" class="btn btn-primary">Back to Home</a> -->
-</body>
-</html>
+
