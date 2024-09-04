@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Home | The Digital Diary
+{{ post.title }} | The Digital Diary
 {% endblock %}
 {% block content %}
     <style>
@@ -14,82 +14,221 @@ Home | The Digital Diary
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .image-container-post {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .post-actions button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .btn-like {
+      border: 2px solid #007bff;
+      background-color: transparent;
+      color: #007bff;
+    }
+    .btn-like:hover {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
     }
     </style>
 
+    <div class="container-post">
+      <h1>{{ post.title }}</h1>
+      <p>by {{ post.author.get_full_name }}</p>
+      <p>{{ post.created_at }}</p>
+      <div class="image-container-post">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%;">
+        {% endif %}
+      </div>
+      <p>{{ post.content|safe }}</p>
+    </div>
 
     <div class="container-post">
-    <h1>{{ post.title }}</h1>
-    <p>by {{ post.author.get_full_name }}</p>
-    <p>{{ post.created_at }}</p>
-    <div class="image-container-post">
-      {% if post.image %}
-      <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%;">
-      {% endif %}
+      <div class="post-actions">
+        <form method="POST" action="{% url 'like_post' post.pk %}" id="like-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-like" id="like-btn">
+                <i class="fa fa-thumbs-up"></i> Like {{ post.likes }}
+            </button>
+            <div id="like-error" style="color: red; margin-top: 5px; display: none;"></div>
+        </form>
+        <button class="btn btn-outline-secondary" id="share-btn" onclick="sharePost()">
+            <i class="fa fa-share-alt"></i> Share
+        </button>
+        <span id="share-count">Shares: {{ post.share_count }}</span>
+      </div>
+      <div id="error-message" class="error-message" style="display:none;"></div>
     </div>
-    <p>{{ post.content|safe }}</p>
+
+    <div class="container-post">
+      <h2>Comments</h2>
+      {% for comment in comments %}
+          <p><strong>{{ comment.author.get_full_name }}</strong> {{ comment.created_at }}</p>
+          <p>{{ comment.text }}</p>
+      {% endfor %}
     </div>
+
     <div class="container-post">
-      <form method="POST" action="{% url 'like_post' post.pk %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary">
-              Like ({{ post.total_likes }})
-          </button>
-      </form>
-      </button>
-      <button class="btn btn-outline-secondary" onclick="sharePost()">Share</button>
-      <span>Shares: {{ post.share_count }}</span>
-  </div>
-      <div>
-    <div class="container-post">
-    <h2>Comments</h2>
-    {% for comment in comments %}
-        <p><strong>{{ comment.author.get_full_name }}</strong> {{ comment.created_at }}</p>
-        <p>{{ comment.text }}</p>
-    {% endfor %}
-  </div>
-  </div>
-    <script>
-        function sharePost() {
-            navigator.share({
-                title: '{{ post.title }}',
-                url: window.location.href
-            }).then(() => {
-                console.log('Successfully shared');
-            }).catch((error) => {
-                console.error('Error sharing:', error);
-            });
-        }
-    </script>
-</div>
-<script>
-    document.getElementById('like-btn').addEventListener('click', function() {
-        fetch('{% url "like_post" post.pk %}')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('like-btn').innerText = `Like (${data.total_likes})`;
-        });
-    });
-</script>
-<div class="container-post">
-    <h2>Add a comment</h2>
-    {% if user.is_authenticated %}
-        {% if new_comment %}
-            <p>Your comment has been added.</p>
+        <h2>Add a comment</h2>
+        {% if user.is_authenticated %}
+            {% if new_comment %}
+                <p>Your comment has been added.</p>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit">Add comment</button>
+                </form>
+            {% endif %}
         {% else %}
-            <form method="post">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <button type="submit">Add comment</button>
-            </form>
+            <p>You need to <a href="{% url 'login' %}">login</a> to add a comment.</p>
         {% endif %}
-    {% else %}
-        <p>You need to <a href="{% url 'login' %}">login</a> to add a comment.</p>
-    {% endif %}
-</div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        function sharePost() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ post.title }}',
+                    url: window.location.href
+                }).then(() => {
+                    // After successful sharing, send a POST request to increment the share count
+                    fetch('{% url "share_post" post.pk %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})  // Sending an empty JSON body; adjust if needed
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the share count in the DOM
+                            document.getElementById('share-count').innerText = `Shares: ${data.share_count}`;
+                        } else {
+                            console.error('Error updating share count');
+                            displayError('Unable to update share count.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        displayError('An error occurred while sharing the post.');
+                    });
+                }).catch((error) => {
+                    console.error('Error sharing:', error);
+                    displayError('An error occurred while attempting to share.');
+                });
+            } else {
+                alert('Sharing not supported by your browser.');
+            }
+        }
+
+        // Function to display error messages
+        function displayError(message) {
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.innerText = message;
+            errorMessageDiv.style.display = 'block';
+        }
+
+        /* // AJAX-like handling for the "Like" button
+        document.getElementById('like-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('like-btn').innerText = `Like (${data.total_likes})`;
+                    document.getElementById('error-message').style.display = 'none';
+                } else {
+                    document.getElementById('error-message').innerText = 'Error: Could not update like count.';
+                    document.getElementById('error-message').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                document.getElementById('error-message').innerText = 'Error: Something went wrong.';
+                document.getElementById('error-message').style.display = 'block';
+                console.error('Error:', error);
+            });
+        });
+        document.getElementById('like-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the form from submitting normally
+    
+    const likeBtn = document.getElementById('like-btn');
+    const url = likeBtn.parentElement.action;  // Get the form action URL
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',  // Ensure CSRF token is correctly included
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the like count in the DOM
+            likeBtn.innerText = `Like (${data.total_likes})`;
+        } else {
+            console.error('Error updating like count');
+            displayError('Unable to update like count.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayError('An error occurred while liking the post.');
+    });
+});
+
+// Function to display error messages
+function displayError(message) {
+    const errorMessageDiv = document.getElementById('error-message');
+    errorMessageDiv.innerText = message;
+    errorMessageDiv.style.display = 'block';
+} */
+});
+    </script>
 {% endblock %}

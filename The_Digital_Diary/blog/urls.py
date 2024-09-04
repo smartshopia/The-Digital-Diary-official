@@ -11,6 +11,7 @@ urlpatterns = [
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('post/new/', views.publish_post, name='publish_post'),
     path('post/<int:pk>/like/', views.like_post, name='like_post'),
+    path('post/<int:pk>/share/', views.share_post, name='share_post'),
     path('categories/<int:pk>/', views.category_posts, name='category_posts'),
     path('ckeditor/', include('django_ckeditor_5.urls')),
     path('about/', about, name='about'),

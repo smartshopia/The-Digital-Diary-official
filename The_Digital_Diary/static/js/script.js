@@ -1,3 +1,4 @@
+$(document).ready(function() {
 function validateSearch() {
     const input = document.querySelector('input[name="q"]');
     if (input.value.trim() === "") {
@@ -38,3 +39,51 @@ $(document).ready(function () {
             // Example: Add animation or any specific logic here
         });
     });
+
+	//like btn
+
+	document.getElementById('like-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent form from submitting normally
+
+    const likeBtn = document.getElementById('like-btn');
+    const errorDiv = document.getElementById('like-error');
+    const url = likeBtn.parentElement.action;  // Get form action URL
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',  // Include CSRF token
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            likeBtn.innerText = `Like (${data.total_likes})`;
+            errorDiv.style.display = 'none';  // Hide error message if success
+        } else {
+            displayError(data.error || 'Unable to update like count.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayError('An error occurred while liking the post.');
+    });
+});
+
+function displayError(message) {
+    const errorDiv = document.getElementById('like-error');
+    errorDiv.innerText = message;
+    errorDiv.style.display = 'block';
+}
+
+	
+	
+
+
+
+
+
+
+});

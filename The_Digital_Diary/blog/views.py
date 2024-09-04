@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate, logout
 from geopy.geocoders import Nominatim
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 #from firebase_config import auth
 from django.contrib import messages
 from django.db.models import Count
@@ -193,7 +195,7 @@ def publish_post(request):
     return render(request, 'blog/publish_post.html', {'form': form})
 
 @login_required
-def like_post(request, pk):
+def like_post2(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
@@ -208,6 +210,37 @@ def like_post1(request, pk):
     else:
         post.likes.add(request.user)
     return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
+
+@require_POST
+def like_post(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to the login page if not authenticated
+
+    try:
+        post = get_object_or_404(Post, pk=pk)
+        post.likes += 1
+        post.save()
+        return JsonResponse({'success': True, 'likes': post.likes})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@require_POST
+@csrf_exempt  # Use this only if you want to bypass CSRF protection. Otherwise, handle CSRF properly.
+def share_post(request, pk):
+    """
+    Handles the share action for a post.
+
+    Args:
+        request: The HTTP request object.
+        pk (int): The primary key of the post being shared.
+
+    Returns:
+        JsonResponse: A JSON response containing the updated share count.
+    """
+    post = get_object_or_404(Post, pk=pk)
+    post.share_count += 1
+    post.save()
+    return JsonResponse({'success': True, 'share_count': post.share_count})
 
 def custom_login_view(request):
     if request.method == 'POST':
