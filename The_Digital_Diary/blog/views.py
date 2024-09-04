@@ -43,8 +43,11 @@ def profile(request):
 def about(request):
     return render(request, 'blog/about.html')
 
-def example(request):
+def example1(request):
     return render(request, 'extras/1.html')
+
+def example2(request):
+    return render(request, 'extras/finance tracker/index.html')
 
 def blog(request):
     posts = Post.objects.all()

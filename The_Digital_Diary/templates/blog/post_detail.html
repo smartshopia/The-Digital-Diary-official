@@ -5,7 +5,7 @@ Home | The Digital Diary
 {% endblock %}
 {% block content %}
     <style>
-        .container {
+    .container-post {
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
@@ -13,28 +13,28 @@ Home | The Digital Diary
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .image-container {
+    .image-container-post {
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-  }
+    }
     </style>
 
 
-    <div class="container">
+    <div class="container-post">
     <h1>{{ post.title }}</h1>
     <p>by {{ post.author.get_full_name }}</p>
     <p>{{ post.created_at }}</p>
-    <div class="image-container">
+    <div class="image-container-post">
       {% if post.image %}
-      <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 600px;">
+      <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%;">
       {% endif %}
     </div>
     <p>{{ post.content|safe }}</p>
     </div>
-    <div class="container">
+    <div class="container-post">
       <form method="POST" action="{% url 'like_post' post.pk %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-primary">
@@ -46,7 +46,7 @@ Home | The Digital Diary
       <span>Shares: {{ post.share_count }}</span>
   </div>
       <div>
-    <div class="container">
+    <div class="container-post">
     <h2>Comments</h2>
     {% for comment in comments %}
         <p><strong>{{ comment.author.get_full_name }}</strong> {{ comment.created_at }}</p>
@@ -76,7 +76,7 @@ Home | The Digital Diary
         });
     });
 </script>
-<div class="container">
+<div class="container-post">
     <h2>Add a comment</h2>
     {% if user.is_authenticated %}
         {% if new_comment %}

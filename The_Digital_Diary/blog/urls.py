@@ -6,7 +6,8 @@ from .views import *
 
 urlpatterns = [
     path('', views.post_list, name='home'),
-    path('example1', views.example, name='example'),
+    path('example1', views.example1, name='example1'),
+    path('example2', views.example2, name='example2'),
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('post/new/', views.publish_post, name='publish_post'),
     path('post/<int:pk>/like/', views.like_post, name='like_post'),

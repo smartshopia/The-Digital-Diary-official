@@ -5,7 +5,7 @@
 	padding: 0;	
 	font-family: Raleway, sans-serif;
 }
-.container-post {
+/* .container-post1 {
     max-width: 1100px;
     margin: 10px auto;
     padding: 10px;
@@ -19,7 +19,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
+} */
 /* Navbar styles */
 .navbar {
   padding: 0.5rem 1rem;

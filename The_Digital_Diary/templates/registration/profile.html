@@ -14,7 +14,8 @@
     <form method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
-        {{ u_form|crispy }} {% if user.profile.profile_picture %}
+        {{ u_form|crispy }}
+        {% if user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture.url }}" alt="Profile" style="width: auto; height: 40px; border-radius: 50%;">
         {% else %}
         <img src="{% static 'images/tdd.jpg' %}" alt="Default Profile" style="width: auto; height: 40px; border-radius: 50%;">
