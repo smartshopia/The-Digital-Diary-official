@@ -18,6 +18,7 @@ urlpatterns = [
     path('blog/', blog, name='blog'),
     path('contact/', contact, name='contact'),
     path('publish/', publish_post, name='publish_post'),
+    path('publish_info/', publish_post_info, name='publish_post_info'),
     path('profile/', profile, name='profile'),
     path('settings/', settings, name='settings'),
     path('categories/', category_list, name='category_list'),

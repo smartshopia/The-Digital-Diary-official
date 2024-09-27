@@ -225,6 +225,11 @@ customColorPalette = [
 #CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
 #CKEDITOR_5_FILE_STORAGE = "" # optional
 CKEDITOR_5_CONFIGS = {
+    'my_custom_config': {
+        'toolbar': 'full',
+        'width': '100%',
+        'height': '300',
+    },
     'default': {
         'toolbar': [
             'heading', '|',

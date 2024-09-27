@@ -1,12 +1,68 @@
 {% extends "baselogin.html" %}
 {% load static %}
-{% block title %}Sign Up{% endblock %}
-
+{% block title %}Sign Up
+{% endblock %}
 {% block content %}
-<h2>Sign up</h2>
-<form method="post">
+<style>
+  div.login__field{
+    width: 200%;
+  }
+</style>
+<div class="container" style="size: 60%;width: 50%;  align-items: center; justify-content: flex-end;">
+
+  <div class="screen__content">
+<form class="signup" autocomplete="on" method="post" enctype="multipart/form-data" id="signup-form" action="{% url 'signup' %}">
   {% csrf_token %}
   
-  <button type="submit">Sign Up</button>
+  <h2>Sign up</h2>
+
+  <!-- First Name Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-user"></i>
+      <input type="text" class="login__input" placeholder="First Name" name="first_name" required id="id_first_name">
+  </div>
+
+  <!-- Last Name Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-user"></i>
+      <input type="text" class="login__input" placeholder="Last Name" name="last_name" required id="id_last_name">
+  </div>
+
+  <!-- Username Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-user"></i>
+      <input type="text" class="login__input" placeholder="Username" name="username" required id="id_username">
+  </div>
+
+  <!-- Email Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-envelope"></i>
+      <input type="email" class="login__input" placeholder="Email Address" name="email" required id="id_email">
+  </div>
+
+  <!-- Password Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-lock"></i>
+      <input type="password" class="login__input" placeholder="Password" name="password" required id="id_password" autocomplete="new-password">
+  </div>
+
+  <!-- Confirm Password Field -->
+  <div class="login__field">
+      <i class="login__icon fas fa-lock"></i>
+      <input type="password" class="login__input" placeholder="Confirm Password" name="confirm_password" required id="id_confirm_password" autocomplete="new-password">
+  </div>
+
+  <!-- Submit Button -->
+  <button class="button signup__submit" type="submit">
+    <span class="button__text"  value="Sign up" type="submit">Sign Up Now</span>
+    <i class="button__icon fas fa-chevron-right"></i>
+</button>
+
+  
+<!-- </form> -->
+  <!-- <button type="submit">Sign Up</button>  -->
 </form>
+  </div>
+</div>
+</div>
 {% endblock %}

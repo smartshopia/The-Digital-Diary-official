@@ -89,16 +89,19 @@
         <h5 class="text-uppercase">Quick Links</h5>
           <ul class="list-unstyled mb-0">
             <li>
-              <a href="#" class="text-dark">Home</a>
+              <a href="{% url 'home' %}" class="text-dark">Home</a>
             </li>
             <li>
-              <a href="#" class="text-dark">About</a>
+              <a href="{% url 'about' %}" class="text-dark">About</a>
             </li>
             <li>
-              <a href="#" class="text-dark">Blog</a>
+              <a href="{% url 'blog' %}" class="text-dark">Blog</a>
             </li>
             <li>
-              <a href="#" class="text-dark">Contact</a>
+              <a href="{% url 'contact' %}" class="text-dark">Contact</a>
+            </li> 
+            <li>
+              <a  href="{% url 'publish_post_info' %}" class="text-dark">Publish</a>
             </li> 
           </ul>
       </div>

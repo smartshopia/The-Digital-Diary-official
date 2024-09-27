@@ -180,6 +180,19 @@ def category_posts(request, pk):
     posts = category.posts.all()
     return render(request, 'blog/category_posts.html', {'category': category, 'posts': posts})
 
+def publish_post_info(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'blog/publish_post.html', {'form': form})
+
 @login_required
 def publish_post(request):
     if request.method == 'POST':
@@ -192,7 +205,7 @@ def publish_post(request):
             return redirect('post_list')
     else:
         form = PostForm()
-    return render(request, 'blog/publish_post.html', {'form': form})
+    return render(request, 'blog/publish_your_post.html', {'form': form})
 
 @login_required
 def like_post2(request, pk):

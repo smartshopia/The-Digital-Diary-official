@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django_countries.widgets import CountrySelectWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 #from tinymce.widgets import TinyMCE
 from .models import *
 
@@ -70,6 +71,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title','author', 'content', 'image','is_published', 'categories']
+        widgets = {
+            'content': CKEditor5Widget(config_name='my_custom_config'),
+        }
   
 class PostAdminForm(forms.ModelForm):
     #content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
@@ -87,7 +91,7 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name', 'description']
 
-class CustomUserCreationForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
